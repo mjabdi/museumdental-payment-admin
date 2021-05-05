@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   pageBg:{
-    paddingTop: theme.spacing(5),
+    paddingTop: theme.spacing(2),
    
     background: "linear-gradient(274deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 5%, rgba(210,210,210,1) 100%)",
     height: "100vh",
@@ -132,11 +132,19 @@ const useStyles = makeStyles((theme) => ({
   },
 
   adminPanelLabel: {
+    color: theme.palette.primary.main, 
+    fontWeight: "600",
+    marginBottom:"10px"
+  },
+
+
+  adminPanelLabel2: {
     color: theme.palette.secondary.main, 
     fontWeight: "600",
-    marginBottom:"20px"
+    marginBottom:"20px",
+    fontSize:"1.5rem",
+    textAlign:"center"
   }
-
 
 
 
@@ -237,7 +245,16 @@ export default function SignIn() {
               />
             </div> */}
 
-            <img src={logoImage} alt="Optimal Vision" style={{marginBottom:"20px"}}/>
+            <img src={'https://www.museumdentalsuites.co.uk/uploads/1534511600822Museum-Dental-Suites-logo.png'} alt="Optimal Vision" style={{marginBottom:"20px", width:"160px", height:"80px"}}/>
+
+            {/* <Typography
+              component="h1"
+              variant="h6"
+              className={classes.adminPanelLabel2}
+            >
+              Museum Dental Payments
+            </Typography> */}
+
 
             <Avatar className={classes.avatar}>
               <LockOutlinedIcon />
@@ -247,7 +264,7 @@ export default function SignIn() {
               variant="h6"
               className={classes.adminPanelLabel}
             >
-              Admin Panel
+              Payments Admin Panel
             </Typography>
 
             {error && (
@@ -272,7 +289,6 @@ export default function SignIn() {
               autoComplete="username"
               value={username}
               onChange={usernameChanged}
-              on
               autoFocus
             />
             <FormControl

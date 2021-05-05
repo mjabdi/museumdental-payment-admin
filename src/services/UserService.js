@@ -9,12 +9,12 @@ export default class UserService{
   
     static signIn = (payload) =>
     {
-        return  API.post('/api/optimalvision/user/signin', payload)
+        return  API.post('/api/museumdental/user/signin', payload)
     }
 
     static checkToken = (payload) =>
     {
-        return  API.post('/api/optimalvision/user/checktoken', payload)
+        return  API.post('/api/museumdental/user/checktoken', payload)
     }
 
 }

@@ -188,14 +188,14 @@ const useStyles = makeStyles((theme) => ({
   },
 
   logoImage: {
-    width: "204px",
-    height: "45px",
+    width: "120px",
+    height: "40px",
     // marginLeft: "0px",
   },
 
   logoImageMenu: {
-    width: "136px",
-    height: "30px",
+    width: "96px",
+    height: "35px",
   },
 
 
@@ -515,7 +515,7 @@ export default function Dashboard() {
                     <React.Fragment>
                       <img
                         className={classes.logoImage}
-                        src={logoImage}
+                        src={"https://www.museumdentalsuites.co.uk/uploads/1534511600822Museum-Dental-Suites-logo.png"}
                         alt="logo image"
                       />
                     </React.Fragment> 
@@ -737,7 +737,7 @@ export default function Dashboard() {
                 <React.Fragment>
                   <img
                     className={classes.logoImageMenu}
-                    src={logoImage} 
+                    src={"https://www.museumdentalsuites.co.uk/uploads/1534511600822Museum-Dental-Suites-logo.png"} 
                     alt="logo image"
 
                   />
