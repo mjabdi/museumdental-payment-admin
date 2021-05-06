@@ -184,6 +184,20 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 5,
     color: "#fff",
   },
+
+  itemLabel:{
+    color: "#555",
+    fontWeight: "500",
+    fontSize: "1rem"
+  },
+
+  itemData: {
+    color: theme.palette.primary.main,
+    fontWeight: "600",
+    fontSize: "1rem"
+  }
+
+
 }));
 
 function NumberFormatCustom(props) {
@@ -264,7 +278,7 @@ function PaperComponent(props) {
   );
 }
 
-export default function NewPaymentDialog(props) {
+export default function ViewPaymentDialog(props) {
   const classes = useStyles();
 
   const LinkRef = React.useRef(null)
@@ -289,6 +303,16 @@ export default function NewPaymentDialog(props) {
   const [description, setDescription] = React.useState("");
 
   const [paymentLink, setPaymentLink] = React.useState(null);
+
+  React.useEffect(() => {
+    if (props.payment && props.open)
+    {
+      setPaymentLink(buildPaymentLink(props.payment._id))
+      setEmail(props.payment.email || '')
+      setPhone(props.payment.phone || '')
+    }
+
+  }, [props.payment, props.open])
 
 
   const fullnameChanged = (event) => {
@@ -395,6 +419,7 @@ export default function NewPaymentDialog(props) {
 
   return (
     <React.Fragment>
+      {props.payment && (
       <React.Fragment>
         <Dialog
           maxWidth="sm"
@@ -426,7 +451,7 @@ export default function NewPaymentDialog(props) {
                   }}
                 >
                   {" "}
-                    Create New Payment Link{" "}
+                    Payment Link Info{" "}
                 </div>
               </Grid>
             </Grid>
@@ -441,78 +466,44 @@ export default function NewPaymentDialog(props) {
               alignItems="flex-start"
               style={{ marginBottom: "20px" }}
             >
-              <Grid item xs={12}>
-                <TextField
-                  disabled={paymentLink !== null || saving}
-                  autoFocus
-                  error={amountError}
-                  label="Amount"
-                  value={amount}
-                  fullWidth
-                  required
-                  onChange={amountChanged}
-                  name="product-price"
-                  id="product-price-id"
-                  InputProps={{
-                    inputComponent: NumberFormatCustom,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        £
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
+                <Grid item xs={12}>
+                  <span className={classes.itemLabel}> Amount: </span>
+                  <span className={classes.itemData}>
+                      {`£${(
+                        props.payment.amount
+                      ).toLocaleString("en-GB")}`}
+                  </span>
 
-              <Grid item xs={12}>
-                <TextField
-                  disabled={paymentLink !== null || saving}
-                  fullWidth
-                  error={fullnameError}
-                  label="Customer/Payer Name"
-                  value={fullname}
-                  required
-                  onChange={fullnameChanged}
-                  name="fullname"
-                  id="fullname-id"
-                  autoComplete="none"
-                />
-              </Grid>
+                </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  disabled={paymentLink !== null || saving}
-                  fullWidth
-                  label="Description"
-                  value={description}
-                  onChange={descriptionChanged}
-                  name="description"
-                  id="description-id"
-                  helperText="This will be shown to the users at payment time."
-                  autoComplete="none"
-                />
-              </Grid>
+                <Grid item xs={12}>
+                  <span className={classes.itemLabel}> Customer/Payer Name: </span>
+                  <span className={classes.itemData}>
+                      {props.payment.fullname || '-'}
+                  </span>
+                </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  disabled={paymentLink !== null || saving}
-                  fullWidth
-                  label="Notes"
-                  value={notes}
-                  onChange={notesChanged}
-                  name="notes"
-                  id="notes-id"
-                  helperText="This is just for your use, it will not be shown to the users."
-                  autoComplete="none"
-                />
-              </Grid>
+                <Grid item xs={12}>
+                  <span className={classes.itemLabel}> Description: </span>
+                  <span className={classes.itemData}>
+                      {props.payment.description || '-'}
+                  </span>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <span className={classes.itemLabel}> Notes: </span>
+                  <span className={classes.itemData}>
+                      {props.payment.notes || '-'}
+                  </span>
+                </Grid>
+
 
               {paymentLink && (
                 <React.Fragment>
 
                   <Grid item xs={12}>
 
-                    <div style={{ fontSize: "1rem", fontWeight: "500", marginBottom: "5px", marginTop: "5px", color: "#333" }}>
+                    <div style={{ fontSize: "1rem", fontWeight: "500",color: "#333" }}>
                       Payment Link URL :
                     </div>
 
@@ -625,10 +616,10 @@ export default function NewPaymentDialog(props) {
                   style={{ width: "100px" }}
                   disabled={saving}
                 >
-                  back
+                  close
                 </Button>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Button
                   disabled={paymentLink !== null || saving}
                   onClick={createLinkClicked}
@@ -637,7 +628,7 @@ export default function NewPaymentDialog(props) {
                 >
                   Create Link
                 </Button>
-              </Grid>
+              </Grid> */}
 
             </Grid>
 
@@ -647,6 +638,7 @@ export default function NewPaymentDialog(props) {
 
         </Dialog>
       </React.Fragment>
+      )}
     </React.Fragment>
   );
 }

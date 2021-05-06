@@ -49,6 +49,7 @@ import PaymentService from './services/PaymentService';
 import PatientDialog from './PatientDialog';
 import LinkIcon from '@material-ui/icons/Link';
 import NewPaymentDialog from './NewPaymentDialog';
+import ViewPaymentDialog from './ViewPaymentDialog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -435,12 +436,10 @@ export default function PaymentsTable(props) {
   }
 
   const openDetailsDialog = (event, id) => {
-    const patient = data.bookings.find(element => element._id === id);
-    if (patient) {
-      setSelectedPatient(patient);
-      setPatientDialogTitle(`${patient.name.toUpperCase()} ${patient.surname.toUpperCase()}`)
-      setPatientDialogSaveButtonText("Save Changes")
-      setPatientDialogOpen(true)
+    const payment = data.bookings.find(element => element._id === id);
+    if (payment) {
+      setSelectedBooking(payment);
+      setViewDialogOpen(true)
     }
   }
 
@@ -476,8 +475,15 @@ export default function PaymentsTable(props) {
   const [patientDialogSaveButtonText, setPatientDialogSaveButtonText] = React.useState('')
 
 
+  const [viewDialogOpen, setViewDialogOpen] = React.useState(false)
+
+
   const handleClosePatientDialog = () => {
     setPatientDialogOpen(false)
+  }
+
+  const handleCloseViewDialog = () => {
+    setViewDialogOpen(false)
   }
 
 
@@ -586,11 +592,11 @@ export default function PaymentsTable(props) {
       </div>
 
 
-      <BookingDialog
+      {/* <BookingDialog
         booking={selectedBooking}
         open={seeDetailsDialogOpen && selectedBooking && selectedBooking.fullname}
         onClose={handleCloseSeeDetaisDialog}
-      />
+      /> */}
 
       {/* <PatientDialog
         patient={selectedPatient}
@@ -603,6 +609,12 @@ export default function PaymentsTable(props) {
       <NewPaymentDialog
         open={patientDialogOpen}
         handleClose={handleClosePatientDialog}
+      />
+
+      <ViewPaymentDialog
+        payment={selectedBooking}
+        open={viewDialogOpen}
+        handleClose={handleCloseViewDialog}
       />
 
 
