@@ -45,9 +45,11 @@ import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import PriceCalculator from './PriceCalculator';
 import { corporates } from './Corporates';
-import PatientService from './services/PatientService';
+import PaymentService from './services/PaymentService';
 import PatientDialog from './PatientDialog';
-import { set } from 'date-fns/esm';
+import LinkIcon from '@material-ui/icons/Link';
+import NewPaymentDialog from './NewPaymentDialog';
+
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -220,7 +222,7 @@ const getTableTitle = (str) => {
   }
 
   else {
-    return `Patients`;
+    return `Payment Links`;
   }
 
 }
@@ -248,7 +250,7 @@ const getTableIcon = (str) => {
   }
 
   else {
-    return <AccessibilityIcon style={{ fontSize: "2.2rem" }} />;
+    return <LinkIcon style={{ fontSize: "2.2rem" }} />;
   }
 
 }
@@ -261,7 +263,7 @@ function PaperComponent(props) {
   );
 }
 
-export default function PatientsTable(props) {
+export default function PaymentsTable(props) {
 
   const classes = useStyles();
 
@@ -270,8 +272,8 @@ export default function PatientsTable(props) {
   var columns = [
     {
       field: "_id",
-      headerName: "Patient ID",
-      width: 150,
+      headerName: " ",
+      width: 70,
       renderCell: (params) => {
         return (
           <React.Fragment>
@@ -282,31 +284,34 @@ export default function PatientsTable(props) {
               <SearchIcon />
             </IconButton>
 
-            <span
+            {/* <span
               style={{
                 color: "#333",
                 fontWeight: "600",
                 fontSize: "0.8rem",
               }}
             >
-              {params.getValue("patientID")}
-            </span>
+              {params.value}
+            </span> */}
           </React.Fragment>
         );
       },
     },
-    { field: 'name', headerName: 'Name', width: 150 },
-    { field: 'surname', headerName: 'Surname', width: 150 },
-    {
-      field: 'birthDate', headerName: 'DOB', width: 150, valueFormatter: (params) => {
-        return FormatDateFromString(params.value);
-      },
+    { field: 'timeStamp', headerName: 'Created at', width: 180, valueFormatter: (params) => { 
+      return formatTimeStamp(params.value);
+      }
     },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'homeTel', headerName: 'Home Tel', width: 150 },
-    { field: 'mobileTel', headerName: 'Mobile Tel', width: 150 },
-    { field: 'postCode', headerName: 'Postcode', width: 300 },
-    { field: 'address', headerName: 'Address', width: 300 },
+
+    { field: 'amount', headerName: 'Amount', width: 150 , valueFormatter: (params) => {
+      return `£${(
+        params.value
+      ).toLocaleString("en-GB")}`
+    },},
+    { field: 'fullname', headerName: 'Customer Name', width: 200 },
+    { field: 'description', headerName: 'Description', width: 250 },
+    { field: 'email', headerName: 'Email', width: 150 },
+    { field: 'phone', headerName: 'Telephone', width: 150 },
+    { field: 'notes', headerName: 'Notes', width: 300 },
 
   ];
 
@@ -343,11 +348,16 @@ export default function PatientsTable(props) {
   }
 
   const loadData = () => {
-    var api = PatientService.getAllPatients;
+    var api = PaymentService.getAllPayments;
 
     if (props.date === 'deleted') {
-      api = PatientService.getDeletedPatients;
+      api = PaymentService.getDeletedPayments;
+    }else if (props.date === 'paid') {
+      api = PaymentService.getPaidPayments;
+    }else if (props.date === 'refund') {
+      api = PaymentService.getRefundPayments;
     }
+
 
     setData({ bookings: [], cachedBookings: [], isFetching: true });
 
@@ -355,10 +365,10 @@ export default function PatientsTable(props) {
 
     const currentPromise = api().then((res) => {
       // console.log(res)
-      for (var i = 0; i < res.data.length; i++) {
-        res.data[i] = { ...res.data[i], id: i + 1 }
+      for (var i = 0; i < res.data.result.length; i++) {
+        res.data.result[i] = { ...res.data.result[i], id: i + 1 }
       }
-      setData({ bookings: [...res.data], cachedBookings: [...res.data], isFetching: false });
+      setData({ bookings: [...res.data.result], cachedBookings: [...res.data.result], isFetching: false });
       // return res.data;
     }).catch(err => {
       console.error(err)
@@ -416,7 +426,7 @@ export default function PatientsTable(props) {
 
     loadData()
 
-  }, [state.patientDialogDataChanged]);
+  }, [state.paymentDialogDataChanged]);
 
 
   const handleCloseSeeDetaisDialog = () => {
@@ -499,16 +509,17 @@ export default function PatientsTable(props) {
                 </span>
               </Grid>
               <Grid item>
-                <span
+                <div
                   style={{
-                    fontSize: "1.4rem",
+                    fontSize: "1.2rem",
                     fontWeight: "600",
                     color: "#444",
+                    marginTop : "-5px"
                   }}
                 >
                   {" "}
                   {getTableTitle(props.date)}{" "}
-                </span>
+                </div>
               </Grid>
               <Grid item>
                 <Tooltip title="Refresh" placement="right">
@@ -525,21 +536,23 @@ export default function PatientsTable(props) {
           </div>
         </Grid>
 
-        <Grid item md={3}>
-          <div style={{ paddingBottom: "10px" }}>
-            <Button
-              // className={classes.ExportToExcelButton}
-              variant="contained"
-              color="primary"
-              onClick={registerNewPatientClicked}
-              startIcon={
-                <AddIcon />
-              }
-            >
-              Register new Patient
-              </Button>
-          </div>
-        </Grid>
+      {props.date === "all" && (
+            <Grid item md={3}>
+            <div style={{ paddingBottom: "10px" }}>
+              <Button
+                // className={classes.ExportToExcelButton}
+                variant="contained"
+                color="primary"
+                onClick={registerNewPatientClicked}
+                startIcon={
+                  <AddIcon />
+                }
+              >
+                Create New Link
+                </Button>
+            </div>
+          </Grid>
+      )}
 
         {data.isFetching && <div className={classes.HideNowRows}></div>}
 
@@ -579,13 +592,19 @@ export default function PatientsTable(props) {
         onClose={handleCloseSeeDetaisDialog}
       />
 
-      <PatientDialog
+      {/* <PatientDialog
         patient={selectedPatient}
         open={patientDialogOpen}
         handleClose={handleClosePatientDialog}
         title={patientDialogTitle}
         saveButtonText={patientDialogSaveButtonText}
+      /> */}
+
+      <NewPaymentDialog
+        open={patientDialogOpen}
+        handleClose={handleClosePatientDialog}
       />
+
 
     </React.Fragment>
   );

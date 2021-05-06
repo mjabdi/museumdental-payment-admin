@@ -53,6 +53,24 @@ import PatientsTable from "./OV/PatientsTable";
 
 //---------------
 
+
+// Museum Admin ----------------
+import PaymentsTable from "./Museum/PaymentsTable";
+
+//---------------
+
+import LinkIcon from '@material-ui/icons/Link';
+
+export const MenuList_Museum_Admin = [
+  {
+    index: 0,
+    id: `paymentsTable`,
+    title: `Payment Links`,
+    icon: <LinkIcon />,
+  },
+]
+
+//---------------
 export const MenuList_OV_Admin = [
   {
     index: 0,
@@ -384,25 +402,10 @@ export const MenuList_PCR = [
 ];
 
 export const getMenuContent = (role, index) => {
-   if (role === "ovadmin") {
+   if (role === "museumadmin") {
     switch (index) {
       case 0:
-        return <OVBookingTable date="recent" />;
-      case 2:
-        return <OVBookingTable date="today" />;
-      case 3:
-        return <OVBookingTable date="old" />;
-      case 4:
-        return <OVBookingTable date="future" />;
-      case 5:
-        return <OVBookingTable date="all" />;
-      case 6:
-        return <OVBookingTable date="deleted" />;
-      case 7:
-        return <OVCalendarView />;  
-      case 8:
-        return <PatientsTable />;  
-  
+        return <PaymentsTable date="all"/>;  
       default:
         return `Page Not Found!`;
     }
@@ -413,8 +416,8 @@ export const getMenuContent = (role, index) => {
 
 export const getMenuRole = (role) => {
   switch (role) {
-    case "ovadmin":
-      return MenuList_OV_Admin;
+    case "museumadmin":
+      return MenuList_Museum_Admin;
     default:
       return [];
   }
