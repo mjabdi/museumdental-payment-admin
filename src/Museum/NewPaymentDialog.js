@@ -10,6 +10,7 @@ import {
   Divider,
   FormControlLabel,
   Grid,
+  IconButton,
   InputAdornment,
   InputLabel,
   Link,
@@ -45,6 +46,7 @@ import { corporates } from "./Corporates";
 import NumberFormat from "react-number-format";
 import LinkIcon from '@material-ui/icons/Link';
 import PaymentService from "./services/PaymentService";
+import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
 
 var interval;
@@ -337,14 +339,12 @@ export default function NewPaymentDialog(props) {
     setSaving(false);
   };
 
-  const createLinkClicked = async () =>
-  {
-    if (!validatePayment())
-    {
+  const createLinkClicked = async () => {
+    if (!validatePayment()) {
       return
     }
 
-    try{
+    try {
       setSaving(true)
       const paymentRecord = {
         amount: amount,
@@ -355,18 +355,16 @@ export default function NewPaymentDialog(props) {
 
       const res = await PaymentService.createNewPaymentLink(paymentRecord)
 
-      if (res && res.data && res.data.status === "OK")
-      {
+      if (res && res.data && res.data.status === "OK") {
         const payment = res.data.payment
         setPaymentLink(buildPaymentLink(payment._id))
-        setState(state => ({...state, paymentDialogDataChanged: !state.paymentDialogDataChanged}))
+        setState(state => ({ ...state, paymentDialogDataChanged: !state.paymentDialogDataChanged }))
         LinkRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
 
       setSaving(false)
 
-    }catch(err)
-    {
+    } catch (err) {
       console.error(err)
       setSaving(false)
     }
@@ -374,18 +372,15 @@ export default function NewPaymentDialog(props) {
 
   }
 
-  const validatePayment = () =>
-  {
+  const validatePayment = () => {
     let error = false
 
-    if (!amount || amount.trim().length === 0 || parseFloat(amount) <= 0 )
-    {
+    if (!amount || amount.trim().length === 0 || parseFloat(amount) <= 0) {
       setAmountError(true)
       error = true
     }
 
-    if (!fullname || fullname.trim().length === 0)
-    {
+    if (!fullname || fullname.trim().length === 0) {
       setFullnameError(true)
       error = true
     }
@@ -394,8 +389,7 @@ export default function NewPaymentDialog(props) {
 
   }
 
-  const buildPaymentLink = (id) =>
-  {
+  const buildPaymentLink = (id) => {
     return `https://londonmedicalclinic.co.uk/museumdentalpayment/pay/${id}`
   }
 
@@ -445,7 +439,7 @@ export default function NewPaymentDialog(props) {
               justify="space-between"
               spacing={2}
               alignItems="flex-start"
-              style={{marginBottom:"20px"}}
+              style={{ marginBottom: "20px" }}
             >
               <Grid item xs={12}>
                 <TextField
@@ -515,17 +509,39 @@ export default function NewPaymentDialog(props) {
 
               {paymentLink && (
                 <React.Fragment>
-                  
+
                   <Grid item xs={12}>
 
-                    <div style={{fontSize:"1rem", fontWeight:"500", marginBottom:"5px", marginTop:"5px", color:"#333"}}>
+                    <div style={{ fontSize: "1rem", fontWeight: "500", marginBottom: "5px", marginTop: "5px", color: "#333" }}>
                       Payment Link URL :
                     </div>
 
-                    <div style={{ width: "100%", overflowWrap:"break-word"}} ref={LinkRef}>
-                      <Link style={{fontSize:"1rem", fontWeight:"500"}} href={paymentLink} target="_blank" rel="noopener">
+                    <div style={{ width: "100%", overflowWrap: "break-word" }} ref={LinkRef}>
+                      <Link style={{ fontSize: "1rem", fontWeight: "500" }} href={paymentLink} target="_blank" rel="noopener">
                         {paymentLink}
                       </Link>
+
+                      <span>
+
+                        <Tooltip title="COPY LINK TO CLIPBOARD">
+                          <IconButton
+                            onClick={() => {
+                              navigator.clipboard.writeText(
+                                paymentLink
+                              );
+                            }}
+                            aria-label="delete"
+                            className={classes.margin}
+                            size="small"
+                          >
+                            <FileCopyOutlinedIcon
+                              style={{color:"#bf9b30", fontSize:"1.3rem", marginLeft:"10px"}}
+                            />
+                          </IconButton>
+                        </Tooltip>
+
+                      </span>
+
                     </div>
                   </Grid>
 
