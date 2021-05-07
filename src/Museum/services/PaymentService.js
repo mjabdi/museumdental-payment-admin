@@ -3,11 +3,15 @@ import axiosRetry from 'axios-retry';
 
 export default class PaymentService {
 
+   static sendPaymentLinkEmail = (museumPaymentId, email) =>
+   {
+      return API.post(`/api/museumdental/payment/sendpaymentlinkemail`, {museumPaymentId : museumPaymentId, email: email});
+   }
+
    static doPayment = (paymentId, museumPaymentId) =>
    {
       return API.post(`/api/museumdental/payment/dopayment`, {paymentId: paymentId  , museumPaymentId : museumPaymentId});
    }
-
 
    static refundPayment = (paymentId) =>
    {

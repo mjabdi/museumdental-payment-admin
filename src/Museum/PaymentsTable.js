@@ -51,6 +51,12 @@ import LinkIcon from '@material-ui/icons/Link';
 import NewPaymentDialog from './NewPaymentDialog';
 import ViewPaymentDialog from './ViewPaymentDialog';
 
+import DoneIcon from '@material-ui/icons/Done';
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import SendIcon from '@material-ui/icons/Send';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -202,10 +208,10 @@ const useStyles = makeStyles((theme) => ({
 
 const getTableTitle = (str) => {
 
-  if (str === 'today') {
-    return `Today's Bookings`;
-  } else if (str === 'old') {
-    return `Old Bookings`;
+  if (str === 'paid') {
+    return `Successful Payments`;
+  } else if (str === 'refund') {
+    return `Refunded Payments`;
   } else if (str === 'future') {
     return `Future Bookings`;
   } else if (str === 'recent') {
@@ -217,7 +223,7 @@ const getTableTitle = (str) => {
   } else if (str === 'positive') {
     return `Positive Results`;
   } else if (str === 'deleted') {
-    return `Archived Records`;
+    return `Deleted Records`;
   } else if (str === 'late') {
     return `40 Hours Late`;
   }
@@ -230,10 +236,10 @@ const getTableTitle = (str) => {
 
 const getTableIcon = (str) => {
 
-  if (str === 'today') {
-    return <NewReleasesIcon style={{ fontSize: "2.2rem" }} />;
-  } else if (str === 'old') {
-    return <HistoryIcon style={{ fontSize: "2.2rem" }} />;
+  if (str === 'paid') {
+    return <DoneOutlineIcon style={{ fontSize: "2.2rem" }} />;
+  } else if (str === 'refund') {
+    return <KeyboardReturnIcon style={{ fontSize: "2.2rem" }} />;
   } else if (str === 'future') {
     return <TimelineIcon style={{ fontSize: "2.2rem" }} />;
   } else if (str === 'recent') {
@@ -274,7 +280,7 @@ export default function PaymentsTable(props) {
     {
       field: "_id",
       headerName: " ",
-      width: 70,
+      width: 120,
       renderCell: (params) => {
         return (
           <React.Fragment>
@@ -285,15 +291,20 @@ export default function PaymentsTable(props) {
               <SearchIcon />
             </IconButton>
 
-            {/* <span
-              style={{
-                color: "#333",
-                fontWeight: "600",
-                fontSize: "0.8rem",
-              }}
-            >
-              {params.value}
-            </span> */}
+            {params.getValue("paymentInfo") && !params.getValue("refund") && (
+              <DoneOutlineIcon style={{color:"#009c39", fontSize:"1.6rem"}}/>
+            )}
+
+            {params.getValue("paymentInfo") && params.getValue("refund") && (
+              <KeyboardReturnIcon style={{color:"#f06400", fontSize:"1.6rem"}}/>
+            )}
+            
+            {!params.getValue("paymentInfo") && params.getValue("emailSent") && (
+              <SendIcon style={{color:"#008082", fontSize:"1.6rem"}}/>
+            )}
+
+
+
           </React.Fragment>
         );
       },
@@ -406,12 +417,7 @@ export default function PaymentsTable(props) {
     if (filter && filter.trim().length > 0) {
       var filteredData = data.cachedBookings.filter((element) =>
 
-        (element.name?.toLowerCase().indexOf(filter.toLowerCase()) >= 0) ||
-        (element.surname?.toLowerCase().indexOf(filter.toLowerCase()) >= 0) ||
-        ((element.name + ' ' + element.surname)?.toLowerCase().indexOf(filter.toLowerCase()) >= 0)
-
-
-
+        (element.fullname?.toLowerCase().indexOf(filter.toLowerCase()) >= 0)
       );
 
 

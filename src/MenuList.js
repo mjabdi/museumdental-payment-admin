@@ -16,6 +16,12 @@ import EventNoteIcon from "@material-ui/icons/EventNote";
 import AirplanemodeActiveIcon from "@material-ui/icons/AirplanemodeActive";
 import AccessibilityIcon from '@material-ui/icons/Accessibility';
 
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import SendIcon from '@material-ui/icons/Send';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+
+
 /// PCR ------------------
 import FindByRef from "./PCR/FindByRef";
 import BookingTable from "./PCR/BookingTable";
@@ -68,6 +74,25 @@ export const MenuList_Museum_Admin = [
     title: `Payment Links`,
     icon: <LinkIcon />,
   },
+  {
+    index: 1,
+    id: `paidpaymentsTable`,
+    title: `Successful Payments`,
+    icon: <DoneOutlineIcon />,
+  },
+  {
+    index: 2,
+    id: `refundpaymentsTable`,
+    title: `Refunded Payments`,
+    icon: <KeyboardReturnIcon />,
+  },
+  {
+    index: 3,
+    id: `deletedpaymentsTable`,
+    title: `Deleted Records`,
+    icon: <DeleteIcon />,
+  },
+
 ]
 
 //---------------
@@ -406,6 +431,13 @@ export const getMenuContent = (role, index) => {
     switch (index) {
       case 0:
         return <PaymentsTable date="all"/>;  
+        case 1:
+          return <PaymentsTable date="paid"/>;  
+          case 2:
+            return <PaymentsTable date="refund"/>;  
+            case 3:
+              return <PaymentsTable date="deleted"/>;  
+            
       default:
         return `Page Not Found!`;
     }

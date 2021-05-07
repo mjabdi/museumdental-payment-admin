@@ -178,23 +178,23 @@ const useStyles = makeStyles((theme) => ({
 
   appbarCenter: {
     position: "fixed",
-    width: "260px",
+    width: "100px",
     top: "10px",
     left: "50%",
-    marginLeft: "-130px",
+    marginLeft: "-50px",
     alignItems: "center",
     justify: "center",
     display: "flex",
   },
 
   logoImage: {
-    width: "120px",
+    width: "100px",
     height: "40px",
     // marginLeft: "0px",
   },
 
   logoImageMenu: {
-    width: "96px",
+    width: "90px",
     height: "35px",
   },
 

@@ -48,6 +48,10 @@ import LinkIcon from '@material-ui/icons/Link';
 import PaymentService from "./services/PaymentService";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
+import * as EmailValidator from "email-validator";
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import SendIcon from '@material-ui/icons/Send';
+
 
 var interval;
 
@@ -281,6 +285,8 @@ export default function NewPaymentDialog(props) {
 
   const [emailError, setEmailError] = React.useState(false);
   const [phoneError, setPhoneError] = React.useState(false);
+  const [emailSent, setEmailSent] = React.useState(false);
+
 
   const [phone, setPhone] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -289,7 +295,7 @@ export default function NewPaymentDialog(props) {
   const [description, setDescription] = React.useState("");
 
   const [paymentLink, setPaymentLink] = React.useState(null);
-
+  const [paymentId, setPaymentId] = React.useState(null);
 
   const fullnameChanged = (event) => {
     setFullname(event.target.value);
@@ -302,6 +308,11 @@ export default function NewPaymentDialog(props) {
 
   const emailChanged = (event) => {
     setEmail(event.target.value);
+    if (EmailValidator.validate(event.target.value))
+    {
+      setEmailError(false)
+    }
+   
   };
 
   const notesChanged = (event) => {
@@ -331,12 +342,14 @@ export default function NewPaymentDialog(props) {
     setDescription('')
     setNotes('')
     setPaymentLink(null)
+    setPaymentId(null)
 
     setAmountError(false)
     setFullnameError(false)
     setEmailError(false)
     setPhoneError(false)
     setSaving(false);
+    setEmailSent(false)
   };
 
   const createLinkClicked = async () => {
@@ -358,6 +371,7 @@ export default function NewPaymentDialog(props) {
       if (res && res.data && res.data.status === "OK") {
         const payment = res.data.payment
         setPaymentLink(buildPaymentLink(payment._id))
+        setPaymentId(payment._id)
         setState(state => ({ ...state, paymentDialogDataChanged: !state.paymentDialogDataChanged }))
         LinkRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
@@ -391,6 +405,34 @@ export default function NewPaymentDialog(props) {
 
   const buildPaymentLink = (id) => {
     return `https://londonmedicalclinic.co.uk/museumdentalpayment/pay/${id}`
+  }
+
+  const sendEmailClicked = async () =>
+  {
+    if (!email || email.length < 3 || !EmailValidator.validate(email))
+    {
+      setEmailError(true)
+      return
+    }
+
+    try{
+
+      setSaving(true)
+
+     const res = await PaymentService.sendPaymentLinkEmail(paymentId, email)
+     if (res && res.data && res.data.status === "OK")
+     {
+       setState(state => ({ ...state, paymentDialogDataChanged: !state.paymentDialogDataChanged }))
+       setEmailSent(true)     
+     }
+
+     setSaving(false)
+
+    }catch(err)
+    {
+      console.log(err)
+      setSaving(false)
+    }
   }
 
   return (
@@ -555,6 +597,12 @@ export default function NewPaymentDialog(props) {
                       name="email"
                       id="email-id"
                       autoComplete="none"
+                      InputProps={ emailSent &&  {
+                        endAdornment: <InputAdornment position="end">
+                          <span style={{marginRight:"10px" , color:"#009c39", fontSize:"1rem", fontWeight:"500"}}>Email Sent</span>
+                          <SendIcon style={{marginRight:"10px" , color:"#009c39", fontSize:"1.6rem"}}/>
+                        </InputAdornment>,
+                      }}
                     />
                   </Grid>
 
@@ -562,7 +610,7 @@ export default function NewPaymentDialog(props) {
                     <Button
                       disabled={saving}
                       fullWidth
-                      // onClick={createLinkClicked}
+                      onClick={sendEmailClicked}
                       variant="contained"
                       color="primary"
                     >
