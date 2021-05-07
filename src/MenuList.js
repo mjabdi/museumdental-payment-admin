@@ -62,6 +62,7 @@ import PatientsTable from "./OV/PatientsTable";
 
 // Museum Admin ----------------
 import PaymentsTable from "./Museum/PaymentsTable";
+import MuseumDashboard from "./Museum/DashboardPreview"
 
 //---------------
 
@@ -70,24 +71,30 @@ import LinkIcon from '@material-ui/icons/Link';
 export const MenuList_Museum_Admin = [
   {
     index: 0,
+    id: `dashboard`,
+    title: `Dashboard`,
+    icon: <DashboardIcon />,
+  },
+  {
+    index: 1,
     id: `paymentsTable`,
     title: `Payment Links`,
     icon: <LinkIcon />,
   },
   {
-    index: 1,
+    index: 2,
     id: `paidpaymentsTable`,
     title: `Successful Payments`,
     icon: <DoneOutlineIcon />,
   },
   {
-    index: 2,
+    index: 3,
     id: `refundpaymentsTable`,
     title: `Refunded Payments`,
     icon: <KeyboardReturnIcon />,
   },
   {
-    index: 3,
+    index: 4,
     id: `deletedpaymentsTable`,
     title: `Deleted Records`,
     icon: <DeleteIcon />,
@@ -430,12 +437,14 @@ export const getMenuContent = (role, index) => {
    if (role === "museumadmin") {
     switch (index) {
       case 0:
+        return <MuseumDashboard/>;  
+      case 1:
         return <PaymentsTable date="all"/>;  
-        case 1:
+        case 2:
           return <PaymentsTable date="paid"/>;  
-          case 2:
+          case 3:
             return <PaymentsTable date="refund"/>;  
-            case 3:
+            case 4:
               return <PaymentsTable date="deleted"/>;  
             
       default:

@@ -48,10 +48,33 @@ export default class PaymentService {
       return API.get(`/api/museumdental/payment/getrefundpayments`);
    }
 
+   static getRecentPayments = () => {
+      return API.get(`/api/museumdental/payment/getrecentpayments`);
+   }
+
    static getPaymentById = (paymentId) =>
    {
       return API.get(`/api/museumdental/payment/getpaymentbyid?id=${paymentId}`);
    }
+
+   static getTotalReceivedAmount = () => {
+      return API.get(`/api/museumdental/payment/gettotalreceivedamount`);
+   }
+
+   static getTodayReceivedAmount = () => {
+      return API.get(`/api/museumdental/payment/gettodayreceivedamount`);
+   }
+
+   static getTotalLinkSent = () => {
+      return API.get(`/api/museumdental/payment/gettotallinksent`);
+   }
+
+   static getTodayLinkSent = () => {
+      return API.get(`/api/museumdental/payment/gettodaylinksent`);
+   }
+
+
+   
 
 
 }

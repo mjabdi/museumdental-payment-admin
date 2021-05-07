@@ -53,7 +53,7 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import SendIcon from '@material-ui/icons/Send';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import dateformat from 'dateformat'
 
 var interval;
 
@@ -317,6 +317,7 @@ export default function ViewPaymentDialog(props) {
   const [emailSent, setEmailSent] = React.useState(false);
   const [refundDone, setRefundDone] = React.useState(false);
   const [deleteDone, setdeleteDone] = React.useState(false);
+  const [refundTimeStamp, setRefundTimeStamp] = React.useState(null)
 
 
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
@@ -384,6 +385,7 @@ export default function ViewPaymentDialog(props) {
     setDescription('')
     setNotes('')
     setPaymentLink(null)
+    setRefundTimeStamp(null)
 
     setAmountError(false)
     setFullnameError(false)
@@ -489,6 +491,7 @@ export default function ViewPaymentDialog(props) {
       setOpenRefundDialog(false)
       if (res && res.data && res.data.status === "OK") {
         setRefundDone(true)
+        setRefundTimeStamp(new Date())
         setState(state => ({ ...state, paymentDialogDataChanged: !state.paymentDialogDataChanged }))
       }
     } catch (err) {
@@ -593,12 +596,21 @@ export default function ViewPaymentDialog(props) {
                 style={{ marginBottom: "20px" }}
               >
                 {props.payment.paymentInfo && (
-                  <Grid item xs={12}>
-                    <span className={classes.itemLabel} style={{ color: "#009c39", marginRight: "10px" }}> Stripe Ref # : </span>
-                    <span className={classes.itemData} style={{ color: "#009c39" }}>
-                      {JSON.parse(props.payment.paymentInfo).payment_method}
-                    </span>
-                  </Grid>
+                  <React.Fragment>
+                    <Grid item xs={12}>
+                      <span className={classes.itemLabel} style={{ color: "#009c39", marginRight: "10px" }}> Stripe Ref # : </span>
+                      <span className={classes.itemData} style={{ color: "#009c39" }}>
+                        {JSON.parse(props.payment.paymentInfo).payment_method}
+                      </span>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <span className={classes.itemLabel} style={{ color: "#009c39", marginRight: "10px" }}> Payment done at : </span>
+                        <span className={classes.itemData} style={{ color: "#009c39" }}>
+                          {dateformat(props.payment.paymentTimeStamp,"dddd, mmmm dS, yyyy, h:MM:ss TT")}
+                        </span>
+                    </Grid>  
+                 </React.Fragment>
+                
                 )}
 
                 {props.payment.paymentInfo && !props.payment.refund && !refundDone && (
@@ -615,11 +627,20 @@ export default function ViewPaymentDialog(props) {
                 )}
 
                 {props.payment.paymentInfo && (props.payment.refund || refundDone) && (
+                  <React.Fragment> 
                   <Grid item xs={12}>
                     <div style={{ fontSize: "1.1rem", fontWeight: "600", textAlign: "left", color: "#f06400" }}>
                       Payment has been Refunded.
                     </div>
                   </Grid>
+                    <Grid item xs={12}>
+                        <span className={classes.itemLabel} style={{ color: "#f06400", marginRight: "10px" }}> Refund done at : </span>
+                        <span className={classes.itemData} style={{ color: "#f06400" }}>
+                          {dateformat(props.payment.refundTimeStamp || refundTimeStamp,"dddd, mmmm dS, yyyy, h:MM:ss TT")}
+                        </span>
+                    </Grid>  
+                    </React.Fragment>
+              
                 )}
 
 

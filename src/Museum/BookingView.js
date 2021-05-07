@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
-import BookService from './services/BookService';
+import PaymentService from './services/PaymentService';
 import * as dateformat from 'dateformat';
 import GlobalState from './../GlobalState';
 import { getMenuIndex } from './../MenuList';
@@ -31,23 +31,23 @@ export default function BookingView() {
 
   const [loading, setLoading] = React.useState(false)
 
-  const seeMoreRecords = (event) => {
-    event.preventDefault();
-    setState(state=>({...state, currentMenuIndex:getMenuIndex('gynae',`recentBookings`)}));
-  }
+  // const seeMoreRecords = (event) => {
+  //   event.preventDefault();
+  //   setState(state=>({...state, currentMenuIndex:getMenuIndex('gynae',`recentBookings`)}));
+  // }
 
   const loadData = () => 
   {
     setData({bookings: data.bookings, isFetching: true});
     setLoading(true)
-    BookService.getRecentBookings().then( (res) =>{
+    PaymentService.getRecentPayments().then( (res) =>{
       setLoading(false)
-        setData({bookings: res.data, isFetching: false});
+        setData({bookings: res.data.result, isFetching: false});
 
     }).catch( (err) => {
       setLoading(false)
         console.log(err);
-        setData({bookings: data.bookings, isFetching: false});
+        setData({bookings: data.bookings.result, isFetching: false});
     });
   }
 
@@ -92,36 +92,40 @@ export default function BookingView() {
           <LinearProgress color="primary" />
         </div>
       )}
-      <Title>Recent Bookings</Title>
+      <Title>Recent Payments Received</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>TimeStamp</TableCell>        
-            <TableCell>Fullname</TableCell>
+            <TableCell>Recived at</TableCell>        
+            <TableCell>Amount</TableCell>        
+            <TableCell>Customer</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Tel</TableCell>
-            <TableCell>Booked Date</TableCell>
-            <TableCell>Booked Time</TableCell> 
+            <TableCell>Desctiption</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
           {data.bookings.map((row) => (
             <TableRow key={row._id}>
-              <TableCell>{formatTimeStamp(row.timeStamp)}</TableCell>
+              <TableCell>{formatTimeStamp(row.paymentTimeStamp)}</TableCell>
+              <TableCell style={{fontWeight:"600"}}>{`£${(
+                row.amount
+              ).toLocaleString("en-GB")}`}
+              </TableCell>
               <TableCell>{row.fullname}</TableCell>
               <TableCell>{row.email}</TableCell>
               <TableCell>{row.phone}</TableCell>
-              <TableCell>{FormatDateFromString(row.bookingDate)}</TableCell>
-              <TableCell>{row.bookingTime}</TableCell>
+              <TableCell>{row.description}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div className={classes.seeMore}>
+      {/* <div className={classes.seeMore}>
         <Link color="primary" href="#" onClick={seeMoreRecords}>
           See more records
         </Link>
-      </div>
+      </div> */}
     </React.Fragment>
   );
 }
