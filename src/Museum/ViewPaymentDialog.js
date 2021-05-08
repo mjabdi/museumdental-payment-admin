@@ -831,7 +831,7 @@ export default function ViewPaymentDialog(props) {
                   </Grid>
                     <Grid item xs={12}>
                       <Button
-                        disabled={saving}
+                        disabled={saving || (props.payment.paymentInfo || props.payment.refund || props.payment.deleted)}
                         fullWidth
                         onClick={sendTextClicked}
                         variant="contained"
