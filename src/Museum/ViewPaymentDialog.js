@@ -54,6 +54,8 @@ import SendIcon from '@material-ui/icons/Send';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import DeleteIcon from '@material-ui/icons/Delete';
 import dateformat from 'dateformat'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 
 var interval;
 
@@ -315,6 +317,8 @@ export default function ViewPaymentDialog(props) {
   const [paymentLink, setPaymentLink] = React.useState(null);
 
   const [emailSent, setEmailSent] = React.useState(false);
+  const [phoneSent, setPhoneSent] = React.useState(false);
+
   const [refundDone, setRefundDone] = React.useState(false);
   const [deleteDone, setdeleteDone] = React.useState(false);
   const [refundTimeStamp, setRefundTimeStamp] = React.useState(null)
@@ -397,6 +401,7 @@ export default function ViewPaymentDialog(props) {
     setOpenRefundDialog(false)
     setOpenDeleteDialog(false)
     setdeleteDone(false)
+    setPhoneSent(false)
   };
 
   const createLinkClicked = async () => {
@@ -513,6 +518,34 @@ export default function ViewPaymentDialog(props) {
       }
     } catch (err) {
       console.error(err)
+      setSaving(false)
+    }
+  }
+
+  const sendTextClicked = async () =>
+  {
+    if (!phone || (phone.trim().length < 13))
+    {
+      setPhoneError(true)
+      return
+    }
+
+    try{
+
+      setSaving(true)
+
+     const res = await PaymentService.sendPaymentLinkTextMessage(props.payment._id, phone)
+     if (res && res.data && res.data.status === "OK")
+     {
+       setState(state => ({ ...state, paymentDialogDataChanged: !state.paymentDialogDataChanged }))
+       setPhoneSent(true)     
+     }
+
+     setSaving(false)
+
+    }catch(err)
+    {
+      console.log(err)
       setSaving(false)
     }
   }
@@ -727,13 +760,26 @@ export default function ViewPaymentDialog(props) {
                         name="email"
                         id="email-id"
                         autoComplete="none"
-                        InputProps={(props.payment.emailSent || emailSent) && {
+                        variant="outlined"
+                        placeholder="Enter customer email address"
+                        InputProps={ (emailSent || props.payment.emailSent) ?  {
                           endAdornment: <InputAdornment position="end">
-                            <span style={{ marginRight: "10px", color: "#009c39", fontSize: "1rem", fontWeight: "500" }}>Email Sent</span>
-                            <SendIcon style={{ marginRight: "10px", color: "#009c39", fontSize: "1.6rem" }} />
+                            <span style={{marginRight:"10px" , color:"#009c39", fontSize:"1rem", fontWeight:"500"}}>Email Sent</span>
+                            <SendIcon style={{marginRight:"10px" , color:"#009c39", fontSize:"1.6rem"}}/>
                           </InputAdornment>,
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AccountCircleIcon style={{color:"#05acb2"}}/>
+                            </InputAdornment>
+                          ),
+                        } : {
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AccountCircleIcon style={{color:"#05acb2"}} />
+                            </InputAdornment>
+                          ),
                         }}
-
+  
                       />
                     </Grid>
 
@@ -750,24 +796,44 @@ export default function ViewPaymentDialog(props) {
                     </Grid>
 
 
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        disabled={true}
-                        error={phoneError}
-                        label="Customer Telephone Number"
-                        value={phone}
-                        onChange={phoneChanged}
-                        name="phone"
-                        id="phone-id"
-                        autoComplete="none"
-                      />
-                    </Grid>
+                    <Grid item xs={12} style={{marginTop:"20px"}}>
+                    <TextField
+                      fullWidth
+                      error={phoneError}
+                      label="Customer Mobile Number"
+                      value={phone}
+                      onChange={phoneChanged}
+                      name="phone"
+                      id="phone-id"
+                      autoComplete="none"
+                      variant="outlined"
+                      placeholder="+44 1234567891"
+                      helperText="* Please write the complete phone number including the country code without any space character, e.g: '+441234567891'"
+                      InputProps={ (phoneSent || props.payment.textSent) ?  {
+                        endAdornment: <InputAdornment position="end">
+                          <span style={{marginRight:"10px" , color:"#009c39", fontSize:"1rem", fontWeight:"500"}}>Text MSG Sent</span>
+                          <SendIcon style={{marginRight:"10px" , color:"#009c39", fontSize:"1.6rem"}}/>
+                        </InputAdornment>,
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PhoneAndroidIcon style={{color:"#05acb2"}}/>
+                          </InputAdornment>
+                        ),
+                      } : {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PhoneAndroidIcon style={{color:"#05acb2"}} />
+                          </InputAdornment>
+                        ),
+                      }}
+
+                    />
+                  </Grid>
                     <Grid item xs={12}>
                       <Button
-                        disabled={true}
+                        disabled={saving}
                         fullWidth
-                        // onClick={createLinkClicked}
+                        onClick={sendTextClicked}
                         variant="contained"
                         color="primary"
                       >

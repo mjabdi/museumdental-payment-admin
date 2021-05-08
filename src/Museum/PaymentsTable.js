@@ -299,7 +299,7 @@ export default function PaymentsTable(props) {
               <KeyboardReturnIcon style={{color:"#f06400", fontSize:"1.6rem"}}/>
             )}
             
-            {!params.getValue("paymentInfo") && params.getValue("emailSent") && (
+            {!params.getValue("paymentInfo") && (params.getValue("emailSent") || params.getValue("textSent")) && (
               <SendIcon style={{color:"#008082", fontSize:"1.6rem"}}/>
             )}
 
