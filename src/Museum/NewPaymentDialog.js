@@ -440,7 +440,7 @@ export default function NewPaymentDialog(props) {
 
   const sendTextClicked = async () =>
   {
-    if (!phone || (phone.trim().length < 13))
+    if (!phone || (phone.trim().length < 10))
     {
       setPhoneError(true)
       return
@@ -675,8 +675,8 @@ export default function NewPaymentDialog(props) {
                       id="phone-id"
                       autoComplete="none"
                       variant="outlined"
-                      placeholder="+44 1234567891"
-                      helperText="* Please write the complete phone number including the country code without any space character, e.g: '+441234567891'"
+                      placeholder="1234567891"
+                      helperText="* Please enter only the mobile number (10 numbers) without the country code. Just UK numbers are accepted."
                       InputProps={ phoneSent ?  {
                         endAdornment: <InputAdornment position="end">
                           <span style={{marginRight:"10px" , color:"#009c39", fontSize:"1rem", fontWeight:"500"}}>Text MSG Sent</span>
@@ -685,12 +685,15 @@ export default function NewPaymentDialog(props) {
                         startAdornment: (
                           <InputAdornment position="start">
                             <PhoneAndroidIcon style={{color:"#05acb2"}}/>
+                            <span style={{color:"#05acb2"}}> (+44) </span> 
                           </InputAdornment>
                         ),
                       } : {
                         startAdornment: (
                           <InputAdornment position="start">
-                            <PhoneAndroidIcon style={{color:"#05acb2"}} />
+                            <PhoneAndroidIcon style={{color:"#05acb2"}}/>
+                            <span style={{color:"#05acb2"}}> (+44) </span> 
+                           
                           </InputAdornment>
                         ),
                       }}
