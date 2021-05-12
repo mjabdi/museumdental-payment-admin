@@ -34,7 +34,7 @@ export default function TotalLinksSentView() {
     setLoading(true);
 
     try {
-      const res = await PaymentService.getTodayLinkSent();
+      const res = await PaymentService.getTotalLinkSent();
 
       setData(res.data.result);
 
