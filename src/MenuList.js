@@ -20,6 +20,7 @@ import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import SendIcon from '@material-ui/icons/Send';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 
 
 /// PCR ------------------
@@ -70,31 +71,37 @@ import LinkIcon from '@material-ui/icons/Link';
 
 export const MenuList_Museum_Admin = [
   {
-    index: 0,
+    index: 1,
     id: `dashboard`,
     title: `Dashboard`,
     icon: <DashboardIcon />,
   },
   {
-    index: 1,
+    index: 2,
     id: `paymentsTable`,
     title: `Payment Links`,
     icon: <LinkIcon />,
   },
   {
-    index: 2,
+    index: 3,
     id: `paidpaymentsTable`,
     title: `Successful Payments`,
     icon: <DoneOutlineIcon />,
   },
   {
-    index: 3,
+    index: 4,
+    id: `notyetPaid`,
+    title: `Not Yet Paid`,
+    icon: <MoneyOffIcon />,
+  },
+  {
+    index: 5,
     id: `refundpaymentsTable`,
     title: `Refunded Payments`,
     icon: <KeyboardReturnIcon />,
   },
   {
-    index: 4,
+    index: 6,
     id: `deletedpaymentsTable`,
     title: `Deleted Records`,
     icon: <DeleteIcon />,
@@ -436,15 +443,17 @@ export const MenuList_PCR = [
 export const getMenuContent = (role, index) => {
    if (role === "museumadmin") {
     switch (index) {
-      case 0:
-        return <MuseumDashboard/>;  
       case 1:
+        return <MuseumDashboard/>;  
+      case 2:
         return <PaymentsTable date="all"/>;  
-        case 2:
+        case 3:
           return <PaymentsTable date="paid"/>;  
-          case 3:
+          case 4:
+            return <PaymentsTable date="notpaid"/>;      
+          case 5:
             return <PaymentsTable date="refund"/>;  
-            case 4:
+            case 6:
               return <PaymentsTable date="deleted"/>;  
             
       default:

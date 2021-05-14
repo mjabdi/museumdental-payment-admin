@@ -56,7 +56,7 @@ import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import SendIcon from '@material-ui/icons/Send';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
-
+import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -216,8 +216,8 @@ const getTableTitle = (str) => {
     return `Future Bookings`;
   } else if (str === 'recent') {
     return `Recent Bookings`;
-  } else if (str === 'live') {
-    return `Live Bookings`;
+  } else if (str === 'notpaid') {
+    return `Not Yet Paid`;
   } else if (str === 'completed') {
     return `Completed Bookings`;
   } else if (str === 'positive') {
@@ -244,8 +244,8 @@ const getTableIcon = (str) => {
     return <TimelineIcon style={{ fontSize: "2.2rem" }} />;
   } else if (str === 'recent') {
     return <AutorenewIcon style={{ fontSize: "2.2rem" }} />;
-  } else if (str === 'live') {
-    return <LiveTvIcon style={{ fontSize: "2.2rem" }} />;
+  } else if (str === 'notpaid') {
+    return <MoneyOffIcon style={{ fontSize: "2.2rem" }} />;
   } else if (str === 'completed') {
     return <PlaylistAddCheckIcon style={{ fontSize: "2.2rem" }} />;
   } else if (str === 'positive') {
@@ -368,6 +368,8 @@ export default function PaymentsTable(props) {
       api = PaymentService.getPaidPayments;
     }else if (props.date === 'refund') {
       api = PaymentService.getRefundPayments;
+    }else if (props.date === 'notpaid') {
+      api = PaymentService.getNotPaidPayments;
     }
 
 

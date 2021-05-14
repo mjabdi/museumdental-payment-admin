@@ -49,6 +49,12 @@ export default class PaymentService {
       return API.get(`/api/museumdental/payment/getpaidpayments`);
    }
 
+   static getNotPaidPayments = () =>
+   {
+      return API.get(`/api/museumdental/payment/getnotpaidpayments`);
+   }
+
+
    static getRefundPayments = () =>
    {
       return API.get(`/api/museumdental/payment/getrefundpayments`);
