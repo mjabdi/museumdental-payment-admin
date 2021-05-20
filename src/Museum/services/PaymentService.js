@@ -54,6 +54,11 @@ export default class PaymentService {
       return API.get(`/api/museumdental/payment/getnotpaidpayments`);
    }
 
+   static getLatePayments = () =>
+   {
+      return API.get(`/api/museumdental/payment/getlatepayments`);
+   }
+
 
    static getRefundPayments = () =>
    {

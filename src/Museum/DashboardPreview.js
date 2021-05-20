@@ -13,8 +13,13 @@ import GlobalState from './../GlobalState';
 import BookingView from './BookingView';
 import TotalReceivedPaymentView from './TotalReceivedPaymentView';
 import TodayReceivedPaymentView from './TodayReceivedPaymentView';
-import TotalLinksSentView from './TotalLinkSentView';
 import TodayLinksSentView from './TodayLinkSentView';
+import LatePaymentsView from './LatePaymentsView';
+import { useLocation, useHistory } from "react-router-dom";
+import { getGlobalPath } from "./../GlobalPath";
+import { getMenuId, getMenuIndex } from "./../MenuList";
+
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -36,6 +41,16 @@ export default function DashboardPreview() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const fixedHeightPaperSmall = clsx(classes.paper, classes.fixedHeightSmall);
 
+  const history = useHistory();
+
+  const role="museumadmin"
+
+  const gotoLatePayments = () =>
+  {
+    history.push(getGlobalPath(`/${getMenuId(role, getMenuIndex(role,'latepaymentsTable'))}`));
+  }
+
+
   return (
     <React.Fragment>
 
@@ -54,8 +69,8 @@ export default function DashboardPreview() {
         </Grid>
 
         <Grid item xs={12} md={6} lg={3}>
-          <Paper className={fixedHeightPaperSmall}>
-              <TotalLinksSentView/>
+          <Paper className={fixedHeightPaperSmall} onClick={gotoLatePayments} style={{cursor:"pointer"}}>
+              <LatePaymentsView/>
           </Paper>
         </Grid>
         <Grid item xs={12} md={6} lg={3}>

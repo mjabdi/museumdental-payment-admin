@@ -221,7 +221,7 @@ const getTableTitle = (str) =>{
     return `Archived Records`;
   }else if (str === 'late')
   {
-    return `40 Hours Late`;
+    return `4 Hours Late`;
   }
   
   else

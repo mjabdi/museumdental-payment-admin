@@ -225,7 +225,7 @@ const getTableTitle = (str) => {
   } else if (str === 'deleted') {
     return `Deleted Records`;
   } else if (str === 'late') {
-    return `40 Hours Late`;
+    return `4 Hours Late`;
   }
 
   else {
@@ -370,6 +370,8 @@ export default function PaymentsTable(props) {
       api = PaymentService.getRefundPayments;
     }else if (props.date === 'notpaid') {
       api = PaymentService.getNotPaidPayments;
+    }else if (props.date === 'late') {
+      api = PaymentService.getLatePayments;
     }
 
 

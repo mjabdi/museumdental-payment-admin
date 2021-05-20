@@ -13,15 +13,20 @@ const useStyles = makeStyles((theme) => ({
    color: theme.palette.secondary.main
   },
 
-   Icon: {
-    fontSize: "2rem"
+  countLabelRed: {
+    fontSize: "2rem",
+    color: "red"
+   },
 
-  },
+   TitleRed:{
+    color: "red"
+   }
+
 
 
 }));
 
-export default function TotalLinksSentView() {
+export default function LatePaymentsView() {
   const classes = useStyles();
 
   const [data, setData] = React.useState(null);
@@ -34,9 +39,9 @@ export default function TotalLinksSentView() {
     setLoading(true);
 
     try {
-      const res = await PaymentService.getTotalLinkSent();
+      const res = await PaymentService.getLatePayments();
 
-      setData(res.data.result);
+      setData(res.data.result?.length || 0);
 
       setLoading(false);
     } catch (err) {
@@ -83,16 +88,14 @@ export default function TotalLinksSentView() {
               </div>
             </Grid> */}
             <Grid item>
-                <div style={{width:"100%", textAlign:"center", fontSize:"1.5rem"}}>
-                    Total Payment Links Sent
+                <div style={{width:"100%", textAlign:"center", fontSize:"1.5rem"}} className={data === 0 ? classes.Title : classes.TitleRed}>
+                    4 Hours Late Payments
                 </div>
             </Grid>
             <Grid item></Grid>
             <Grid item>
-                {data !== null && <div className={classes.countLabel}>
-                      {data}                
-                  </div>
-                }
+              {data !== null && <div className={data === 0 ? classes.countLabel : classes.countLabelRed }>{data}</div>}
+
             </Grid>
           </Grid>
 
