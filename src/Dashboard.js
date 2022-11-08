@@ -515,7 +515,7 @@ export default function Dashboard() {
                     <React.Fragment>
                       <img
                         className={classes.logoImage}
-                        src={"https://www.museumdentalsuites.co.uk/uploads/1534511600822Museum-Dental-Suites-logo.png"}
+                        src={"https://www.museumdentalsuites.co.uk/public/design/images/Museum-Dental-Suites-logo.png"}
                         alt="logo image"
                       />
                     </React.Fragment> 
@@ -737,7 +737,7 @@ export default function Dashboard() {
                 <React.Fragment>
                   <img
                     className={classes.logoImageMenu}
-                    src={"https://www.museumdentalsuites.co.uk/uploads/1534511600822Museum-Dental-Suites-logo.png"} 
+                    src={"https://www.museumdentalsuites.co.uk/public/design/images/Museum-Dental-Suites-logo.png"} 
                     alt="logo image"
 
                   />

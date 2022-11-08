@@ -245,7 +245,7 @@ export default function SignIn() {
               />
             </div> */}
 
-            <img src={'https://www.museumdentalsuites.co.uk/uploads/1534511600822Museum-Dental-Suites-logo.png'} alt="Optimal Vision" style={{marginBottom:"20px", width:"160px", height:"80px"}}/>
+            <img src={'https://www.museumdentalsuites.co.uk/public/design/images/Museum-Dental-Suites-logo.png'} alt="Optimal Vision" style={{marginBottom:"20px", width:"160px", height:"80px"}}/>
 
             {/* <Typography
               component="h1"
