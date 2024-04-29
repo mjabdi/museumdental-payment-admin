@@ -1029,7 +1029,7 @@ export default function PersonsBox() {
                             </li>
 
                             <li className={classes.li}>
-                            <span className={classes.infoTitle}>GENDER</span> 
+                            <span className={classes.infoTitle}>SEX</span> 
                                         <span hidden={(editMode.edit && editMode.person._id  === person._id)} className={classes.infoData}>{person.gender?.toUpperCase()}</span>  
                                         <span hidden={!(editMode.edit && editMode.person._id  === person._id)} className={classes.infoData}>
                                           <TextField 

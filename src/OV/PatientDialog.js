@@ -450,9 +450,9 @@ export default function PatientDialog(props) {
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={4}>
                                     <FormControl fullWidth variant="outlined" >
-                                        <InputLabel id="gender-label">Gender</InputLabel>
+                                        <InputLabel id="gender-label">Sex</InputLabel>
                                         <Select
-                                            label="Gender"
+                                            label="Sex"
                                             labelId="gender-label"
                                             id="gender-label"
                                             fullWidth

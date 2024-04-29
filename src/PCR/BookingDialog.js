@@ -1470,7 +1470,7 @@ export default function BookingDialog(props) {
                       <li className={classes.li}>
                         <Grid container spacing={2}>
                           <Grid item xs={6}>
-                            <span className={classes.infoTitle}>GENDER</span>
+                            <span className={classes.infoTitle}>SEX</span>
                             <span
                               hidden={
                                 editMode.edit &&
